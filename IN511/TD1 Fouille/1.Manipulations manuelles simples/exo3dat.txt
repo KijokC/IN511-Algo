@@ -8,3 +8,10 @@
   "blanc"
   "noir" 
   "vert"
+  
+4 vert 
+3 rouge
+1 violet 
+1 blanc 
+1 noir
+0 jaune
