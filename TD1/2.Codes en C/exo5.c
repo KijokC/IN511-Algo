@@ -1,29 +1,39 @@
-#include <stdlib.h>
 #include <stdio.h>
-//79
-int main(int argc, char *argv[])
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+#define path "exo4dat.txt"
+
+void main()
 {
-	FILE* file = fopen(argv[1], "r"); 
-	
-	int i = 0;
-	int moy = 0;
-	int max = 5;
-	int min = -1;
-	fscanf (file, "%d", &i);    
-	while (!feof (file))
-    {  
-      //printf ("%d\n", i);
-      if(min == -1) min = i;
-      if(i > max) max = i;
-      if(i < min) min = i;
-      moy += i;
-      
-      fscanf (file, "%d", &i);      
+    FILE* f = fopen( path, "r");
+    if( !f )
+    {
+        printf("%s\n", strerror(errno));
+        return;
     }
-    moy = moy - max - min;
-    moy = moy / 48;
-    printf("%d\n",moy);
+
+    int index = 0; // compteur de valeurs compris dans le fichier 
+    float max = -99999.99; 
+    float min = 99999.99;
+    double sum = 0.0; // somme de toutes les valeurs lu
+    float c; // stocke le caractère lu du fichier 
+
+    for( int i = 0; fscanf(f, "%f", &c) != EOF; i++ )
+    {
+        sum += c;
+
+        if( c < min )
+            min = c;
+        else if ( c > max )
+            max = c;
+            
+        index++;
+    }
     
-	fclose(file);
-	
+    fclose(f);
+
+    if( index != 2 ) // On ne peut pas diviser par 0 
+        printf("Trimmed mean : %f\n", (sum-max-min)/(index-2)); // La valeur donné par RStudio est 79.875
 }
